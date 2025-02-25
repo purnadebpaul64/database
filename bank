@@ -1,3 +1,98 @@
+-- Create the tables
+CREATE TABLE Branch (
+    BranchName VARCHAR(50) PRIMARY KEY,
+    BranchCity VARCHAR(50),
+    Assets DECIMAL(15,2)
+);
+
+CREATE TABLE Customer (
+    CustomerID INT PRIMARY KEY,
+    CustomerName VARCHAR(50),
+    CustomerStreet VARCHAR(100),
+    CustomerCity VARCHAR(50)
+);
+
+CREATE TABLE Account (
+    AccountNumber INT PRIMARY KEY,
+    BranchName VARCHAR(50),
+    Balance DECIMAL(15,2),
+    FOREIGN KEY (BranchName) REFERENCES Branch(BranchName)
+);
+
+CREATE TABLE Loan (
+    LoanNumber INT PRIMARY KEY,
+    BranchName VARCHAR(50),
+    Amount DECIMAL(15,2),
+    FOREIGN KEY (BranchName) REFERENCES Branch(BranchName)
+);
+
+CREATE TABLE Depositor (
+    CustomerID INT,
+    AccountNumber INT,
+    PRIMARY KEY (CustomerID, AccountNumber),
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
+    FOREIGN KEY (AccountNumber) REFERENCES Account(AccountNumber)
+);
+
+CREATE TABLE Borrower (
+    CustomerID INT,
+    LoanNumber INT,
+    PRIMARY KEY (CustomerID, LoanNumber),
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
+    FOREIGN KEY (LoanNumber) REFERENCES Loan(LoanNumber)
+);
+
+-- Insert data into Branch
+INSERT INTO Branch (BranchName, BranchCity, Assets) VALUES
+('Dhaka Main', 'Dhaka', 50000000),
+('Chittagong Central', 'Chittagong', 30000000),
+('Rajshahi Bank', 'Rajshahi', 20000000),
+('Sylhet Finance', 'Sylhet', 15000000),
+('Khulna Trust', 'Khulna', 18000000);
+
+-- Insert data into Customer
+INSERT INTO Customer (CustomerID, CustomerName, CustomerStreet, CustomerCity) VALUES
+(1, 'Md. Rahim', 'Banani', 'Dhaka'),
+(2, 'Abdul Karim', 'Agrabad', 'Chittagong'),
+(3, 'Sultana Akter', 'Shah Makhdum', 'Rajshahi'),
+(4, 'Hasan Ali', 'Zindabazar', 'Sylhet'),
+(5, 'Nasima Begum', 'Sonadanga', 'Khulna');
+
+-- Insert data into Account
+INSERT INTO Account (AccountNumber, BranchName, Balance) VALUES
+(101, 'Dhaka Main', 120000),
+(102, 'Chittagong Central', 90000),
+(103, 'Rajshahi Bank', 150000),
+(104, 'Sylhet Finance', 110000),
+(105, 'Khulna Trust', 130000);
+
+-- Insert data into Loan
+INSERT INTO Loan (LoanNumber, BranchName, Amount) VALUES
+(201, 'Dhaka Main', 500000),
+(202, 'Chittagong Central', 300000),
+(203, 'Rajshahi Bank', 200000),
+(204, 'Sylhet Finance', 150000),
+(205, 'Khulna Trust', 250000);
+
+-- Insert data into Depositor
+INSERT INTO Depositor (CustomerID, AccountNumber) VALUES
+(1, 101),
+(2, 102),
+(3, 103),
+(4, 104),
+(5, 105);
+
+-- Insert data into Borrower
+INSERT INTO Borrower (CustomerID, LoanNumber) VALUES
+(1, 201),
+(2, 202),
+(3, 203),
+(4, 204),
+(5, 205);
+
+
+=====================
+
 
 1. Find all customers who have account but no loan in bank.
 
