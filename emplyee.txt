@@ -1,2 +1,99 @@
 #employee database
 
+1. Find the company name that has the most employees.
+
+SELECT company_name  
+FROM works  
+GROUP BY company_name  
+ORDER BY COUNT(employee_id) DESC  
+LIMIT 1; 
+
+2. Find the average salaries of each company.
+
+SELECT company_name, AVG(salary) AS average_salary  
+FROM works  
+GROUP BY company_name;
+
+3. Find all employees who live in city cty but their company is not in cty.
+
+SELECT e.employee_name  
+FROM employee e  
+JOIN works w ON e.employee_id = w.employee_id  
+JOIN company c ON w.company_name = c.company_name  
+WHERE e.employee_city = 'Barishal'  
+AND c.company_city != 'Barishal';  
+
+4. Find the name of all employees who work for First Bank Corporation
+
+SELECT e.employee_name  
+FROM employee e  
+JOIN works w ON e.employee_id = w.employee_id  
+WHERE w.company_name = 'First Bank Co.'; 
+
+5. Find the names, cities, and salaries of all employees who work for FBC.
+
+SELECT e.employee_name, e.employee_city, e.salary  
+FROM employee e  
+JOIN works w ON e.employee_id = w.employee_id  
+WHERE w.company_name = 'First Bank Co.';
+
+6. Find the names of employees who do not work for First Bank Co.
+
+SELECT e.employee_name  
+FROM employee e  
+JOIN works w ON e.employee_id = w.employee_id  
+WHERE w.company_name != 'First Bank Co.';  
+
+7. Find the total salaries of each company.
+
+SELECT company_name, SUM(salary) AS total_salary  
+FROM works  
+GROUP BY company_name; 
+
+8. Give all employees of First Bank Co. a 20% salary raise
+
+update works  
+set salary = salary * 1.2  
+where company_name = 'First bank co.';
+
+9. Find the second highest salary:
+
+select employee_name, salary as second_highest  
+from (  
+    select employee_name, salary,  
+    dense_rank() over (order by salary desc)  
+    as rank from works  
+) as ranked_salary  
+where rank = 2;
+
+10. Find employee_name, company_name, and employee_city of the employee who earns the second highest salary
+
+select employee_name, company_name, employee_city  
+from employee e  
+join works w on e.employee_id = w.employee_id  
+where w.salary = (select max(salary) from works  
+where salary < (select max(salary) from works));
+
+11. 9 er moto 
+12. 9 er moto
+
+13. Find companies with more than 5 employees
+
+select company_name  
+from works group by company_name  
+having count(employee_id) > 5;
+
+14. same as 8
+
+15. Delete all records where an employee has no manager
+
+delete from managers  
+where manager_id is null;
+
+16. Assign a new manager to employees who currently have no manager
+
+update managers  
+set manager_id = (select manager_id from managers  
+where manager_id is not null  
+limit 1)  
+where manager_id is null;
