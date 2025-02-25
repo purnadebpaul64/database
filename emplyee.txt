@@ -1,4 +1,80 @@
-#employee database
+-- Creating Tables
+
+CREATE TABLE employee (
+    EmployeeID INT PRIMARY KEY,
+    EmployeeName VARCHAR(50),
+    Street VARCHAR(100),
+    City VARCHAR(50)
+);
+
+CREATE TABLE works (
+    EmployeeID INT,
+    CompanyName VARCHAR(50),
+    Salary DECIMAL(10,2),
+    PRIMARY KEY (EmployeeID, CompanyName),
+    FOREIGN KEY (EmployeeID) REFERENCES employee(EmployeeID)
+);
+
+CREATE TABLE company (
+    CompanyName VARCHAR(50) PRIMARY KEY,
+    City VARCHAR(50)
+);
+
+CREATE TABLE manages (
+    EmployeeID INT PRIMARY KEY,
+    ManagerID INT,
+    FOREIGN KEY (EmployeeID) REFERENCES employee(EmployeeID),
+    FOREIGN KEY (ManagerID) REFERENCES employee(EmployeeID)
+);
+
+-- Inserting Data into Employee Table
+
+INSERT INTO employee (EmployeeID, EmployeeName, Street, City) VALUES
+(1, 'Rakib Hasan', 'Dhanmondi 32', 'Dhaka'),
+(2, 'Sumaiya Akter', 'Chawk Bazar', 'Chittagong'),
+(3, 'Imran Hossain', 'Kazir Dewri', 'Chittagong'),
+(4, 'Ayesha Siddique', 'Banani', 'Dhaka'),
+(5, 'Mahmudul Islam', 'Shibganj', 'Rajshahi'),
+(6, 'Farzana Rahman', 'Kushtia Sadar', 'Kushtia'),
+(7, 'Naimur Rahman', 'Uttara', 'Dhaka'),
+(8, 'Sajid Mahmud', 'Sylhet Sadar', 'Sylhet');
+
+-- Inserting Data into Company Table
+
+INSERT INTO company (CompanyName, City) VALUES
+('Grameenphone', 'Dhaka'),
+('Robi Axiata', 'Chittagong'),
+('Walton', 'Gazipur'),
+('Square Pharma', 'Dhaka'),
+('ACI Limited', 'Narayanganj'),
+('Bashundhara Group', 'Dhaka'),
+('Unilever BD', 'Chittagong'),
+('BRAC Bank', 'Dhaka');
+
+-- Inserting Data into Works Table
+
+INSERT INTO works (EmployeeID, CompanyName, Salary) VALUES
+(1, 'Grameenphone', 85000.00),
+(2, 'Robi Axiata', 78000.00),
+(3, 'Walton', 92000.00),
+(4, 'Square Pharma', 75000.00),
+(5, 'ACI Limited', 88000.00),
+(6, 'Bashundhara Group', 67000.00),
+(7, 'Unilever BD', 98000.00),
+(8, 'BRAC Bank', 89000.00);
+
+-- Inserting Data into Manages Table
+
+INSERT INTO manages (EmployeeID, ManagerID) VALUES
+(2, 1),  -- Sumaiya is managed by Rakib
+(3, 1),  -- Imran is managed by Rakib
+(4, 3),  -- Ayesha is managed by Imran
+(5, 4),  -- Mahmudul is managed by Ayesha
+(6, 5),  -- Farzana is managed by Mahmudul
+(7, 5),  -- Naimur is managed by Mahmudul
+(8, 6);  -- Sajid is managed by Farzana
+
+==============
 
 1. Find the company name that has the most employees.
 
