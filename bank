@@ -1,0 +1,164 @@
+
+1. Find all customers who have account but no loan in bank.
+
+select customer_name,
+from customer
+where customer_id in (selet customer_id
+from depositor) and
+customer_id not in (select customer_id from borrower);
+
+2. Delete all loans between 10,000 and 25,000
+
+Delete
+from loan
+where amount between 10,000 and 25,000
+
+3. Find the name of all customers who have a loan at Uttara branch"
+
+select customer_name
+from customer
+where customer_id in(
+select customer_id from borrower b, loan l
+where b.loan_number = l.loan_number
+and l.branch_name = "uttara branch'
+);
+
+4. Find all castomers who have both loan and account.
+
+select customer_name
+From customer_name
+where customer_id in (
+Select customer_id from depositor) and customer_id in
+(select customer_id from borrower);
+
+5. Delete all loans with an amount in the range of 0 to 500;
+
+Delete from loan
+where
+amount between 0 and 500;
+
+6. Find the average account balance at each branch
+ 
+select branch_name, avg (balance) as average_balance
+from account
+Group by branch name;
+
+7. Find the name of all branches in the loan relation
+
+Select distinct branch_name
+from loan; 
+
+8.Deduct 3% service charge from account balance for those who have both loan and account; otherwise, deduct 5% charge
+
+update account  
+set balance = case  
+    when account_number in (  
+        select d.account_number  
+        from depositor d, borrower b  
+        where d.customer_id = b.customer_id  
+    ) then  
+        balance - balance * 0.03  
+    else  
+        balance - balance * 0.05  
+end;
+
+9. Increase all balances by 5 percent
+
+update account  
+set balance = balance * 1.05;
+
+10. Find the number of depositors for each branch
+
+select branch_name, count(distinct d.customer_id) as no_of_depositors  
+from depositor d, account a  
+where d.account_number = a.account_number  
+group by branch_name;
+
+11. Find the largest account balance in the bank:
+
+select max(balance) as largest_balance  
+from account;
+
+12. Delete all Asif’s account records.
+
+delete from account  
+where account_number in (  
+    select account_number from depositor d, customer c  
+    where d.customer_id = c.customer_id  
+    and c.customer_name = 'Asif'  
+);
+
+13.  Find the second highest account balance in the bank.
+
+select max(balance) as second_highest_balance  
+from account  
+where balance < (select max(balance) from account);
+
+===or===
+
+select branch_name, balance as second_highest_balance  
+from (  
+    select branch_name, balance,  
+    dense_rank() over (order by balance desc) as rank  
+    from account  
+) as ranked_balances  
+where rank = 2;
+
+
+14. Find all customers who live in the same city as the branch where they have an account but no loan.
+
+select c.customer_name as customer  
+from customer c  
+where customer_id in (  
+    select customer_id  
+    from depositor d, account a  
+    where d.account_number = a.account_number  
+)  
+and customer_id not in (  
+    select customer_id from borrower  
+);
+
+
+15. Find branches that have no accounts.
+
+select branch_name  
+from branch  
+where branch_name not in (  
+    select distinct branch_name from account  
+);
+
+
+16. Find branches where total loan amount is greater than 50,000.
+
+select branch_name  
+from loan  
+group by branch_name  
+having sum(amount) > 50000;
+
+17. Retrieve distinct customers who have either an account or a loan.
+
+select distinct customer_name  
+from customer  
+where customer_id in (select customer_id from depositor)  
+or customer_id in (select customer_id from borrower);
+
+18. Retrieve the branch name with the maximum number of accounts.
+
+select branch_name  
+from account  
+group by branch_name  
+order by count(account_number) desc  
+limit 1;
+
+19. Find the maximum amount issued in each branch.
+
+select branch_name, max(amount) as max_amount  
+from loan  
+group by branch_name;
+
+20. Find customers whose names start with 'A'.
+
+select customer_name  
+from customer  
+where customer_name like 'A%';
+
